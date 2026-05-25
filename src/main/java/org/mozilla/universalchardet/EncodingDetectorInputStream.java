@@ -33,106 +33,90 @@ import java.io.InputStream;
 /**
  * Stream that detect encoding while reading.
  * The normal usage is to fully read from inputstream and call close before check for charset.
- *
  */
 public class EncodingDetectorInputStream extends InputStream {
 
-	private InputStream in;
-	private final UniversalDetector detector = new UniversalDetector(null);
+    private InputStream in;
 
-	/**
-	 * Create the stream
-	 * @param in The InputStream to read from
-	 */
-	public EncodingDetectorInputStream(InputStream in) {
-		super();
-		this.in = in;
-	}
+    private final UniversalDetector detector = new UniversalDetector(null);
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public int available() throws IOException {
-		return in.available();
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	public void close() throws IOException {
-		in.close();
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	public void mark(int readlimit) {
-		in.mark(readlimit);
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	public boolean markSupported() {
-		return in.markSupported();
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	public int read() throws IOException {
-		byte[] data = new byte[1];
-		int nrOfBytesRead = this.read(data, 0, 1);
-		if (nrOfBytesRead >= 0){
-			return data[0];
-		}
-		return -1;
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	public int read(byte[] b, int off, int len) throws IOException {
-		final int nrOfBytesRead = in.read(b, off, len);
-		if (!detector.isDone() && nrOfBytesRead > 0) {
-			detector.handleData(b, off, nrOfBytesRead);
-		}
-		if (nrOfBytesRead == -1) {
-			detector.dataEnd();
-		}
-		return nrOfBytesRead;
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	public int read(byte[] b) throws IOException {
-		return this.read(b, 0, b.length);
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	public void reset() throws IOException {
-		in.reset();
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	public long skip(long n) throws IOException {
-		if (detector.isDone()) {
-			return in.skip(n);
-		}
-		else {
-			int lastRead = 0;
-			long count = -1;
-			for (long i = 0; i < n && lastRead >= 0; i++) {
-				lastRead = this.in.read();
-				count++;
-			}		
-			return count;
-		}
-	}
+    /**
+     * Create the stream
+     * @param in The InputStream to read from
+     */
+    public EncodingDetectorInputStream(InputStream in) {
+        super();
+        this.in = in;
+    }
 
-	/**
-	 * Gets the detected charset, null if not yet detected.
-	 * @return The detected charset
-	 */
-	public String getDetectedCharset() {
-		return detector.getDetectedCharset();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public int available() throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void close() throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void mark(int readlimit) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean markSupported() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int read() throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int read(byte[] b, int off, int len) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int read(byte[] b) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void reset() throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public long skip(long n) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    /**
+     * Gets the detected charset, null if not yet detected.
+     * @return The detected charset
+     */
+    public String getDetectedCharset() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 }

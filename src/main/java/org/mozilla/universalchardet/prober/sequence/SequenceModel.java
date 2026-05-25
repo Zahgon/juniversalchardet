@@ -35,61 +35,52 @@
  * the terms of any one of the MPL, the GPL or the LGPL.
  *
  * ***** END LICENSE BLOCK ***** */
-
 package org.mozilla.universalchardet.prober.sequence;
 
 public abstract class SequenceModel {
+
     ////////////////////////////////////////////////////////////////
     // fields
     ////////////////////////////////////////////////////////////////
-    protected short[]   charToOrderMap;
-    protected byte[]    precedenceMatrix;
-    protected float     typicalPositiveRatio;
-    protected boolean   keepEnglishLetter;
-    protected String    charsetName;
-    
+    protected short[] charToOrderMap;
+
+    protected byte[] precedenceMatrix;
+
+    protected float typicalPositiveRatio;
+
+    protected boolean keepEnglishLetter;
+
+    protected String charsetName;
 
     ////////////////////////////////////////////////////////////////
     // methods
     ////////////////////////////////////////////////////////////////
-    public SequenceModel(
-            short[] charToOrderMap,
-            byte[] precedenceMatrix,
-            float typicalPositiveRatio,
-            boolean keepEnglishLetter,
-            String charsetName)
-    {
-    	super();
+    public SequenceModel(short[] charToOrderMap, byte[] precedenceMatrix, float typicalPositiveRatio, boolean keepEnglishLetter, String charsetName) {
+        super();
         this.charToOrderMap = charToOrderMap.clone();
         this.precedenceMatrix = precedenceMatrix.clone();
         this.typicalPositiveRatio = typicalPositiveRatio;
         this.keepEnglishLetter = keepEnglishLetter;
         this.charsetName = charsetName;
     }
-    
-    public short getOrder(byte b)
-    {
-        int c = b & 0xFF;
-        return this.charToOrderMap[c];
+
+    public short getOrder(byte b) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-    
-    public byte getPrecedence(int pos)
-    {
-        return this.precedenceMatrix[pos];
+
+    public byte getPrecedence(int pos) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-    
-    public float getTypicalPositiveRatio()
-    {
-        return this.typicalPositiveRatio;
+
+    public float getTypicalPositiveRatio() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-    
-    public boolean getKeepEnglishLetter()
-    {
-        return this.keepEnglishLetter;
+
+    public boolean getKeepEnglishLetter() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-    
-    public String getCharsetName()
-    {
-        return this.charsetName;
+
+    public String getCharsetName() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

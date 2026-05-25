@@ -25,7 +25,6 @@ the provisions above, a recipient may use your version of this file under
 the terms of any one of the MPL, the GPL or the LGPL.
 
 */
-
 package org.mozilla.universalchardet;
 
 import java.io.IOException;
@@ -34,67 +33,62 @@ import java.io.OutputStream;
 /**
  * Stream that detect encoding while reading.
  * The normal usage is to fully read from inputstream and call close before check for charset.
- *
  */
 public class EncodingDetectorOutputStream extends OutputStream {
-	
-	private OutputStream out;
-	private final UniversalDetector detector = new UniversalDetector(null);
 
-	/**
-	 * Create stream
-	 * @param out OutputStream
-	 */
-	public EncodingDetectorOutputStream(OutputStream out) {
-		super();
-		this.out = out;
-	}
+    private OutputStream out;
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void close() throws IOException {
-		out.close();
-		detector.dataEnd();
-	}
+    private final UniversalDetector detector = new UniversalDetector(null);
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void flush() throws IOException {
-		out.flush();
-	}
+    /**
+     * Create stream
+     * @param out OutputStream
+     */
+    public EncodingDetectorOutputStream(OutputStream out) {
+        super();
+        this.out = out;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void write(byte[] b, int off, int len) throws IOException {
-		out.write(b, off, len);
-		if (!detector.isDone()) {
-			detector.handleData(b, off, len);
-		}
+    /**
+     * {@inheritDoc}
+     */
+    public void close() throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public void flush() throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void write(byte[] b) throws IOException {
-		this.write(b, 0, b.length);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public void write(byte[] b, int off, int len) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void write(int b) throws IOException {
-		this.write(new byte[] { (byte) b });
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public void write(byte[] b) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
-	/**
-	 * Gets the detected charset, null if not yet detected.
-	 * @return The detected charset
-	 */
-	public String getDetectedCharset() {
-		return detector.getDetectedCharset();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public void write(int b) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    /**
+     * Gets the detected charset, null if not yet detected.
+     * @return The detected charset
+     */
+    public String getDetectedCharset() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 }

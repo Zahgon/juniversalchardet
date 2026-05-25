@@ -35,165 +35,344 @@
  * the terms of any one of the MPL, the GPL or the LGPL.
  *
  * ***** END LICENSE BLOCK ***** */
-
 package org.mozilla.universalchardet.prober;
 
 import java.nio.ByteBuffer;
 import org.mozilla.universalchardet.Constants;
 
-
 public class Latin1Prober extends CharsetProber {
+
     public static final byte UDF = 0;
+
     public static final byte OTH = 1;
+
     public static final byte ASC = 2;
+
     public static final byte ASS = 3;
+
     public static final byte ACV = 4;
+
     public static final byte ACO = 5;
+
     public static final byte ASV = 6;
+
     public static final byte ASO = 7;
+
     public static final int CLASS_NUM = 8;
+
     public static final int FREQ_CAT_NUM = 4;
-    
 
     ////////////////////////////////////////////////////////////////
     // constants continued
     ////////////////////////////////////////////////////////////////
-    private static final byte[] latin1CharToClass = new byte[] {
-          OTH, OTH, OTH, OTH, OTH, OTH, OTH, OTH,   // 00 - 07
-          OTH, OTH, OTH, OTH, OTH, OTH, OTH, OTH,   // 08 - 0F
-          OTH, OTH, OTH, OTH, OTH, OTH, OTH, OTH,   // 10 - 17
-          OTH, OTH, OTH, OTH, OTH, OTH, OTH, OTH,   // 18 - 1F
-          OTH, OTH, OTH, OTH, OTH, OTH, OTH, OTH,   // 20 - 27
-          OTH, OTH, OTH, OTH, OTH, OTH, OTH, OTH,   // 28 - 2F
-          OTH, OTH, OTH, OTH, OTH, OTH, OTH, OTH,   // 30 - 37
-          OTH, OTH, OTH, OTH, OTH, OTH, OTH, OTH,   // 38 - 3F
-          OTH, ASC, ASC, ASC, ASC, ASC, ASC, ASC,   // 40 - 47
-          ASC, ASC, ASC, ASC, ASC, ASC, ASC, ASC,   // 48 - 4F
-          ASC, ASC, ASC, ASC, ASC, ASC, ASC, ASC,   // 50 - 57
-          ASC, ASC, ASC, OTH, OTH, OTH, OTH, OTH,   // 58 - 5F
-          OTH, ASS, ASS, ASS, ASS, ASS, ASS, ASS,   // 60 - 67
-          ASS, ASS, ASS, ASS, ASS, ASS, ASS, ASS,   // 68 - 6F
-          ASS, ASS, ASS, ASS, ASS, ASS, ASS, ASS,   // 70 - 77
-          ASS, ASS, ASS, OTH, OTH, OTH, OTH, OTH,   // 78 - 7F
-          OTH, UDF, OTH, ASO, OTH, OTH, OTH, OTH,   // 80 - 87
-          OTH, OTH, ACO, OTH, ACO, UDF, ACO, UDF,   // 88 - 8F
-          UDF, OTH, OTH, OTH, OTH, OTH, OTH, OTH,   // 90 - 97
-          OTH, OTH, ASO, OTH, ASO, UDF, ASO, ACO,   // 98 - 9F
-          OTH, OTH, OTH, OTH, OTH, OTH, OTH, OTH,   // A0 - A7
-          OTH, OTH, OTH, OTH, OTH, OTH, OTH, OTH,   // A8 - AF
-          OTH, OTH, OTH, OTH, OTH, OTH, OTH, OTH,   // B0 - B7
-          OTH, OTH, OTH, OTH, OTH, OTH, OTH, OTH,   // B8 - BF
-          ACV, ACV, ACV, ACV, ACV, ACV, ACO, ACO,   // C0 - C7
-          ACV, ACV, ACV, ACV, ACV, ACV, ACV, ACV,   // C8 - CF
-          ACO, ACO, ACV, ACV, ACV, ACV, ACV, OTH,   // D0 - D7
-          ACV, ACV, ACV, ACV, ACV, ACO, ACO, ACO,   // D8 - DF
-          ASV, ASV, ASV, ASV, ASV, ASV, ASO, ASO,   // E0 - E7
-          ASV, ASV, ASV, ASV, ASV, ASV, ASV, ASV,   // E8 - EF
-          ASO, ASO, ASV, ASV, ASV, ASV, ASV, OTH,   // F0 - F7
-          ASV, ASV, ASV, ASV, ASV, ASO, ASO, ASO,   // F8 - FF
-    };
-    
-    private static final byte[] latin1ClassModel = new byte[] {
-        /*      UDF OTH ASC ASS ACV ACO ASV ASO  */
-        /*UDF*/  0,  0,  0,  0,  0,  0,  0,  0,
-        /*OTH*/  0,  3,  3,  3,  3,  3,  3,  3,
-        /*ASC*/  0,  3,  3,  3,  3,  3,  3,  3, 
-        /*ASS*/  0,  3,  3,  3,  1,  1,  3,  3,
-        /*ACV*/  0,  3,  3,  3,  1,  2,  1,  2,
-        /*ACO*/  0,  3,  3,  3,  3,  3,  3,  3, 
-        /*ASV*/  0,  3,  1,  3,  1,  1,  1,  3, 
-        /*ASO*/  0,  3,  1,  3,  1,  1,  3,  3,
-    };
-    
-	private ProbingState state;
-	private byte lastCharClass;
-	private int[] freqCounter;
+    private static final byte[] latin1CharToClass = new byte[] { // 00 - 07
+    OTH, // 00 - 07
+    OTH, // 00 - 07
+    OTH, // 00 - 07
+    OTH, // 00 - 07
+    OTH, // 00 - 07
+    OTH, // 00 - 07
+    OTH, // 00 - 07
+    OTH, // 08 - 0F
+    OTH, // 08 - 0F
+    OTH, // 08 - 0F
+    OTH, // 08 - 0F
+    OTH, // 08 - 0F
+    OTH, // 08 - 0F
+    OTH, // 08 - 0F
+    OTH, // 08 - 0F
+    OTH, // 10 - 17
+    OTH, // 10 - 17
+    OTH, // 10 - 17
+    OTH, // 10 - 17
+    OTH, // 10 - 17
+    OTH, // 10 - 17
+    OTH, // 10 - 17
+    OTH, // 10 - 17
+    OTH, // 18 - 1F
+    OTH, // 18 - 1F
+    OTH, // 18 - 1F
+    OTH, // 18 - 1F
+    OTH, // 18 - 1F
+    OTH, // 18 - 1F
+    OTH, // 18 - 1F
+    OTH, // 18 - 1F
+    OTH, // 20 - 27
+    OTH, // 20 - 27
+    OTH, // 20 - 27
+    OTH, // 20 - 27
+    OTH, // 20 - 27
+    OTH, // 20 - 27
+    OTH, // 20 - 27
+    OTH, // 20 - 27
+    OTH, // 28 - 2F
+    OTH, // 28 - 2F
+    OTH, // 28 - 2F
+    OTH, // 28 - 2F
+    OTH, // 28 - 2F
+    OTH, // 28 - 2F
+    OTH, // 28 - 2F
+    OTH, // 28 - 2F
+    OTH, // 30 - 37
+    OTH, // 30 - 37
+    OTH, // 30 - 37
+    OTH, // 30 - 37
+    OTH, // 30 - 37
+    OTH, // 30 - 37
+    OTH, // 30 - 37
+    OTH, // 30 - 37
+    OTH, // 38 - 3F
+    OTH, // 38 - 3F
+    OTH, // 38 - 3F
+    OTH, // 38 - 3F
+    OTH, // 38 - 3F
+    OTH, // 38 - 3F
+    OTH, // 38 - 3F
+    OTH, // 38 - 3F
+    OTH, // 40 - 47
+    OTH, // 40 - 47
+    ASC, // 40 - 47
+    ASC, // 40 - 47
+    ASC, // 40 - 47
+    ASC, // 40 - 47
+    ASC, // 40 - 47
+    ASC, // 40 - 47
+    ASC, // 48 - 4F
+    ASC, // 48 - 4F
+    ASC, // 48 - 4F
+    ASC, // 48 - 4F
+    ASC, // 48 - 4F
+    ASC, // 48 - 4F
+    ASC, // 48 - 4F
+    ASC, // 48 - 4F
+    ASC, // 50 - 57
+    ASC, // 50 - 57
+    ASC, // 50 - 57
+    ASC, // 50 - 57
+    ASC, // 50 - 57
+    ASC, // 50 - 57
+    ASC, // 50 - 57
+    ASC, // 50 - 57
+    ASC, // 58 - 5F
+    ASC, // 58 - 5F
+    ASC, // 58 - 5F
+    ASC, // 58 - 5F
+    OTH, // 58 - 5F
+    OTH, // 58 - 5F
+    OTH, // 58 - 5F
+    OTH, // 58 - 5F
+    OTH, // 60 - 67
+    OTH, // 60 - 67
+    ASS, // 60 - 67
+    ASS, // 60 - 67
+    ASS, // 60 - 67
+    ASS, // 60 - 67
+    ASS, // 60 - 67
+    ASS, // 60 - 67
+    ASS, // 68 - 6F
+    ASS, // 68 - 6F
+    ASS, // 68 - 6F
+    ASS, // 68 - 6F
+    ASS, // 68 - 6F
+    ASS, // 68 - 6F
+    ASS, // 68 - 6F
+    ASS, // 68 - 6F
+    ASS, // 70 - 77
+    ASS, // 70 - 77
+    ASS, // 70 - 77
+    ASS, // 70 - 77
+    ASS, // 70 - 77
+    ASS, // 70 - 77
+    ASS, // 70 - 77
+    ASS, // 70 - 77
+    ASS, // 78 - 7F
+    ASS, // 78 - 7F
+    ASS, // 78 - 7F
+    ASS, // 78 - 7F
+    OTH, // 78 - 7F
+    OTH, // 78 - 7F
+    OTH, // 78 - 7F
+    OTH, // 78 - 7F
+    OTH, // 80 - 87
+    OTH, // 80 - 87
+    UDF, // 80 - 87
+    OTH, // 80 - 87
+    ASO, // 80 - 87
+    OTH, // 80 - 87
+    OTH, // 80 - 87
+    OTH, // 80 - 87
+    OTH, // 88 - 8F
+    OTH, // 88 - 8F
+    OTH, // 88 - 8F
+    ACO, // 88 - 8F
+    OTH, // 88 - 8F
+    ACO, // 88 - 8F
+    UDF, // 88 - 8F
+    ACO, // 88 - 8F
+    UDF, // 90 - 97
+    UDF, // 90 - 97
+    OTH, // 90 - 97
+    OTH, // 90 - 97
+    OTH, // 90 - 97
+    OTH, // 90 - 97
+    OTH, // 90 - 97
+    OTH, // 90 - 97
+    OTH, // 98 - 9F
+    OTH, // 98 - 9F
+    OTH, // 98 - 9F
+    ASO, // 98 - 9F
+    OTH, // 98 - 9F
+    ASO, // 98 - 9F
+    UDF, // 98 - 9F
+    ASO, // 98 - 9F
+    ACO, // A0 - A7
+    OTH, // A0 - A7
+    OTH, // A0 - A7
+    OTH, // A0 - A7
+    OTH, // A0 - A7
+    OTH, // A0 - A7
+    OTH, // A0 - A7
+    OTH, // A0 - A7
+    OTH, // A8 - AF
+    OTH, // A8 - AF
+    OTH, // A8 - AF
+    OTH, // A8 - AF
+    OTH, // A8 - AF
+    OTH, // A8 - AF
+    OTH, // A8 - AF
+    OTH, // A8 - AF
+    OTH, // B0 - B7
+    OTH, // B0 - B7
+    OTH, // B0 - B7
+    OTH, // B0 - B7
+    OTH, // B0 - B7
+    OTH, // B0 - B7
+    OTH, // B0 - B7
+    OTH, // B0 - B7
+    OTH, // B8 - BF
+    OTH, // B8 - BF
+    OTH, // B8 - BF
+    OTH, // B8 - BF
+    OTH, // B8 - BF
+    OTH, // B8 - BF
+    OTH, // B8 - BF
+    OTH, // B8 - BF
+    OTH, // C0 - C7
+    ACV, // C0 - C7
+    ACV, // C0 - C7
+    ACV, // C0 - C7
+    ACV, // C0 - C7
+    ACV, // C0 - C7
+    ACV, // C0 - C7
+    ACO, // C0 - C7
+    ACO, // C8 - CF
+    ACV, // C8 - CF
+    ACV, // C8 - CF
+    ACV, // C8 - CF
+    ACV, // C8 - CF
+    ACV, // C8 - CF
+    ACV, // C8 - CF
+    ACV, // C8 - CF
+    ACV, // D0 - D7
+    ACO, // D0 - D7
+    ACO, // D0 - D7
+    ACV, // D0 - D7
+    ACV, // D0 - D7
+    ACV, // D0 - D7
+    ACV, // D0 - D7
+    ACV, // D0 - D7
+    OTH, // D8 - DF
+    ACV, // D8 - DF
+    ACV, // D8 - DF
+    ACV, // D8 - DF
+    ACV, // D8 - DF
+    ACV, // D8 - DF
+    ACO, // D8 - DF
+    ACO, // D8 - DF
+    ACO, // E0 - E7
+    ASV, // E0 - E7
+    ASV, // E0 - E7
+    ASV, // E0 - E7
+    ASV, // E0 - E7
+    ASV, // E0 - E7
+    ASV, // E0 - E7
+    ASO, // E0 - E7
+    ASO, // E8 - EF
+    ASV, // E8 - EF
+    ASV, // E8 - EF
+    ASV, // E8 - EF
+    ASV, // E8 - EF
+    ASV, // E8 - EF
+    ASV, // E8 - EF
+    ASV, // E8 - EF
+    ASV, // F0 - F7
+    ASO, // F0 - F7
+    ASO, // F0 - F7
+    ASV, // F0 - F7
+    ASV, // F0 - F7
+    ASV, // F0 - F7
+    ASV, // F0 - F7
+    ASV, // F0 - F7
+    OTH, // F8 - FF
+    ASV, // F8 - FF
+    ASV, // F8 - FF
+    ASV, // F8 - FF
+    ASV, // F8 - FF
+    ASV, // F8 - FF
+    ASO, // F8 - FF
+    ASO, // F8 - FF
+    ASO };
 
+    private static final byte[] latin1ClassModel = new byte[] { /*      UDF OTH ASC ASS ACV ACO ASV ASO  */
+    /*UDF*/
+    0, 0, 0, 0, 0, 0, 0, 0, /*OTH*/
+    0, 3, 3, 3, 3, 3, 3, 3, /*ASC*/
+    0, 3, 3, 3, 3, 3, 3, 3, /*ASS*/
+    0, 3, 3, 3, 1, 1, 3, 3, /*ACV*/
+    0, 3, 3, 3, 1, 2, 1, 2, /*ACO*/
+    0, 3, 3, 3, 3, 3, 3, 3, /*ASV*/
+    0, 3, 1, 3, 1, 1, 1, 3, /*ASO*/
+    0, 3, 1, 3, 1, 1, 3, 3 };
 
-	public Latin1Prober() {
-		super();
-		this.freqCounter = new int[FREQ_CAT_NUM];
-		reset();
-	}
+    private ProbingState state;
 
-	@Override
-	public String getCharSetName() {
-		return Constants.CHARSET_WINDOWS_1252;
-	}
+    private byte lastCharClass;
 
-	@Override
-	public float getConfidence() {
-		if (this.state == ProbingState.NOT_ME) {
-			return 0.01f;
-		}
+    private int[] freqCounter;
 
-		float confidence;
-		int total = 0;
-		for (int i = 0; i < this.freqCounter.length; ++i) {
-			total += this.freqCounter[i];
-		}
+    public Latin1Prober() {
+        super();
+        this.freqCounter = new int[FREQ_CAT_NUM];
+        reset();
+    }
 
-		if (total <= 0) {
-			confidence = 0.0f;
-		} else {
-			confidence = this.freqCounter[3] * 1.0f / total;
-			confidence -= this.freqCounter[1] * 20.0f / total;
-		}
+    @Override
+    public String getCharSetName() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
-		if (confidence < 0.0f) {
-			confidence = 0.0f;
-		}
+    @Override
+    public float getConfidence() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
-		// lower the confidence of latin1 so that other more accurate detector
-		// can take priority.
-		confidence *= 0.50f;
+    @Override
+    public ProbingState getState() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
-		return confidence;
-	}
+    @Override
+    public ProbingState handleData(byte[] buf, int offset, int length) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
-	@Override
-	public ProbingState getState() {
-		return this.state;
-	}
+    @Override
+    public final void reset() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
-	@Override
-	public ProbingState handleData(byte[] buf, int offset, int length) {
-		ByteBuffer newBufTmp = filterWithEnglishLetters(buf, offset, length);
-
-		byte charClass;
-		byte freq;
-
-		byte[] newBuf = newBufTmp.array();
-		int newBufLen = newBufTmp.position();
-
-		for (int i = 0; i < newBufLen; ++i) {
-			int c = newBuf[i] & 0xFF;
-			charClass = latin1CharToClass[c];
-			freq = latin1ClassModel[this.lastCharClass * CLASS_NUM + charClass];
-			if (freq == 0) {
-				this.state = ProbingState.NOT_ME;
-				break;
-			}
-			++this.freqCounter[freq];
-			this.lastCharClass = charClass;
-		}
-
-		return this.state;
-	}
-
-	@Override
-	public final void reset() {
-		this.state = ProbingState.DETECTING;
-		this.lastCharClass = OTH;
-		for (int i = 0; i < this.freqCounter.length; ++i) {
-			this.freqCounter[i] = 0;
-		}
-	}
-
-	@Override
-	public void setOption() {
-	}
-
-    
-
+    @Override
+    public void setOption() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 }

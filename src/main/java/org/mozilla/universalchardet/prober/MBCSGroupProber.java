@@ -35,139 +35,66 @@
  * the terms of any one of the MPL, the GPL or the LGPL.
  *
  * ***** END LICENSE BLOCK ***** */
-
 package org.mozilla.universalchardet.prober;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MBCSGroupProber extends CharsetProber {
+
     ////////////////////////////////////////////////////////////////
     // fields
     ////////////////////////////////////////////////////////////////
-    private ProbingState        state;
-    private List<CharsetProber> probers = new ArrayList<>();
-    private CharsetProber       bestGuess;
-    private int                 activeNum;
+    private ProbingState state;
 
+    private List<CharsetProber> probers = new ArrayList<>();
+
+    private CharsetProber bestGuess;
+
+    private int activeNum;
 
     ////////////////////////////////////////////////////////////////
     // methods
     ////////////////////////////////////////////////////////////////
-	public MBCSGroupProber() {
-		super();
-
-
-		
-		probers.add(new GB18030Prober());
-		probers.add(new UTF8Prober());
-		probers.add(new Big5Prober());
-		probers.add(new SJISProber());
-		probers.add(new EUCJPProber());
-		probers.add(new EUCKRProber());
-		probers.add(new EUCTWProber());
-
-		reset();
-	}
-
-    @Override
-	public String getCharSetName() {
-		if (this.bestGuess == null) {
-			getConfidence();
-			if (this.bestGuess == null) {
-				this.bestGuess = probers.get(0);
-			}
-		}
-		return this.bestGuess.getCharSetName();
-	}
-
-    @Override
-	public float getConfidence() {
-        float bestConf = 0.0f;
-        float cf;
-
-        if (this.state == ProbingState.FOUND_IT) {
-            return 0.99f;
-        } else if (this.state == ProbingState.NOT_ME) {
-            return 0.01f;
-        } else {
-        	for(CharsetProber prober: probers) {
-        		if (!prober.isActive()) {
-        			continue;
-        		}
-        		cf = prober.getConfidence();
-                if (bestConf < cf) {
-                    bestConf = cf;
-                    this.bestGuess = prober;
-                }
-        	}
-        }
-
-        return bestConf;
+    public MBCSGroupProber() {
+        super();
+        probers.add(new GB18030Prober());
+        probers.add(new UTF8Prober());
+        probers.add(new Big5Prober());
+        probers.add(new SJISProber());
+        probers.add(new EUCJPProber());
+        probers.add(new EUCKRProber());
+        probers.add(new EUCTWProber());
+        reset();
     }
 
     @Override
-	public ProbingState getState() {
-        return this.state;
+    public String getCharSetName() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
-	public ProbingState handleData(byte[] buf, int offset, int length) {
-        ProbingState st;
-        
-        boolean keepNext = true;
-        byte[] highbyteBuf = new byte[length];
-        int highpos = 0;
-
-        int maxPos = offset + length;
-        for (int i=offset; i<maxPos; ++i) {
-            if ((buf[i] & 0x80) != 0) {
-                highbyteBuf[highpos++] = buf[i];
-                keepNext = true;
-            } else {
-                //if previous is highbyte, keep this even it is a ASCII
-                if (keepNext) {
-                    highbyteBuf[highpos++] = buf[i];
-                    keepNext = false;
-                }
-            }
-        }
-        
-        for(CharsetProber prober: this.probers) {
-        	if (!prober.isActive()) {
-        		continue;
-        	}
-        	st = prober.handleData(highbyteBuf, 0, highpos);
-        	if (st == ProbingState.FOUND_IT || 0.99f == prober.getConfidence()) {
-                this.bestGuess = prober;
-                this.state = ProbingState.FOUND_IT;
-                break;
-            } else if (st == ProbingState.NOT_ME) {
-                prober.setActive(false);
-                this.activeNum--;
-                if (this.activeNum <= 0) {
-                    this.state = ProbingState.NOT_ME;
-                    break;
-                }
-            }
-        }
-        
-        return this.state;
+    public float getConfidence() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
-	public final void reset() {
-        this.activeNum = 0;
-        for (CharsetProber prober: this.probers) {
-            prober.reset();
-            prober.setActive(true);
-            this.activeNum++;
-        }
-        this.bestGuess = null;
-        this.state = ProbingState.DETECTING;
+    public ProbingState getState() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
-    public void setOption()
-    {}
+    public ProbingState handleData(byte[] buf, int offset, int length) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public final void reset() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public void setOption() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 }

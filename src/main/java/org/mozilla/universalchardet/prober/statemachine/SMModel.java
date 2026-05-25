@@ -34,39 +34,37 @@
  * the terms of any one of the MPL, the GPL or the LGPL.
  *
  * ***** END LICENSE BLOCK ***** */
-
 package org.mozilla.universalchardet.prober.statemachine;
 
 public abstract class SMModel {
+
     ////////////////////////////////////////////////////////////////
     // constants
     ////////////////////////////////////////////////////////////////
-    public static final int START    = 0;
-    public static final int ERROR    = 1;
-    public static final int ITSME    = 2;
-    
+    public static final int START = 0;
+
+    public static final int ERROR = 1;
+
+    public static final int ITSME = 2;
 
     ////////////////////////////////////////////////////////////////
     // fields
     ////////////////////////////////////////////////////////////////
-    protected PkgInt    classTable;
-    protected int       classFactor;
-    protected PkgInt    stateTable;
-    protected int[]     charLenTable;
-    protected String    name;
-    
-    
+    protected PkgInt classTable;
+
+    protected int classFactor;
+
+    protected PkgInt stateTable;
+
+    protected int[] charLenTable;
+
+    protected String name;
+
     ////////////////////////////////////////////////////////////////
     // methods
     ////////////////////////////////////////////////////////////////
-    public SMModel(
-            PkgInt classTable,
-            int classFactor,
-            PkgInt stateTable,
-            int[] charLenTable,
-            String name)
-    {
-    	super();
+    public SMModel(PkgInt classTable, int classFactor, PkgInt stateTable, int[] charLenTable, String name) {
+        super();
         this.classTable = classTable;
         this.classFactor = classFactor;
         this.stateTable = stateTable;
@@ -74,20 +72,19 @@ public abstract class SMModel {
         this.name = name;
     }
 
-	public int getClass(byte b) {
-        int c = b & 0xFF;
-        return this.classTable.unpack(c);
+    public int getClass(byte b) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-    
-	public int getNextState(int cls, int currentState) {
-        return this.stateTable.unpack(currentState * this.classFactor + cls);
+
+    public int getNextState(int cls, int currentState) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-    
-	public int getCharLen(int cls) {
-        return this.charLenTable[cls];
+
+    public int getCharLen(int cls) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-    
-	public String getName() {
-        return this.name;
+
+    public String getName() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

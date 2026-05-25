@@ -34,42 +34,36 @@
  * the terms of any one of the MPL, the GPL or the LGPL.
  *
  * ***** END LICENSE BLOCK ***** */
-
 package org.mozilla.universalchardet.prober.statemachine;
 
 public class CodingStateMachine {
-    protected SMModel    model;
-    protected int        currentState;
-    protected int        currentCharLen;
-    protected int        currentBytePos;
-    
-	public CodingStateMachine(SMModel model) {
+
+    protected SMModel model;
+
+    protected int currentState;
+
+    protected int currentCharLen;
+
+    protected int currentBytePos;
+
+    public CodingStateMachine(SMModel model) {
         this.model = model;
         this.currentState = SMModel.START;
     }
-    
-	public int nextState(byte c) {
-        int byteCls = this.model.getClass(c);
-        if (this.currentState == SMModel.START) {
-            this.currentBytePos = 0;
-            this.currentCharLen = this.model.getCharLen(byteCls);
-        }
-        
-        this.currentState = this.model.getNextState(byteCls, this.currentState);
-        ++this.currentBytePos;
-        
-        return this.currentState;
+
+    public int nextState(byte c) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-    
-	public int getCurrentCharLen() {
-        return this.currentCharLen;
+
+    public int getCurrentCharLen() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-    
-	public void reset() {
-        this.currentState = SMModel.START;
+
+    public void reset() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-    
-	public String getCodingStateMachine() {
-        return this.model.getName();
+
+    public String getCodingStateMachine() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }
